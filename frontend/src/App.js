@@ -103,7 +103,7 @@ function App() {
 
   return (
     <Box sx={{ padding: 2, maxWidth: 1200, margin: '0 auto' }}>
-      <Typography variant="h4" gutterBottom align="center">Company Dashboard</Typography>
+      <Typography variant="h4" gutterBottom align="center">Acmecorp Dashboard</Typography>
 
       {/* Dashboard Cards */}
       <Box sx={{
