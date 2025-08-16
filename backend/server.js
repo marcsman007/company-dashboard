@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
   res.send('AcmeCorp Backend Running');
 });
 
-// Start server
-app.listen(PORT, () => {
+// Start server on all interfaces
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
