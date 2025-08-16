@@ -1,0 +1,91 @@
+import React, { useEffect, useState } from 'react';
+import { getUsers, createUser, deleteUser, updateUser } from './services/api';
+
+function App() {
+  const [users, setUsers] = useState([]);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    const data = await getUsers();
+    setUsers(data);
+  };
+
+  const handleAddUser = async (e) => {
+    e.preventDefault();
+    await createUser({ name, email });
+    setName('');
+    setEmail('');
+    fetchUsers();
+  };
+
+  const handleDelete = async (id) => {
+    await deleteUser(id);
+    fetchUsers();
+  };
+
+  const handleUpdate = async (user) => {
+    const newName = prompt("Enter new name:", user.name);
+    const newEmail = prompt("Enter new email:", user.email);
+    if (newName && newEmail) {
+      await updateUser(user._id, { name: newName, email: newEmail });
+      fetchUsers();
+    }
+  };
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h1>AcmeCorp Users</h1>
+
+      {/* Add User Form */}
+      <form onSubmit={handleAddUser} style={{ marginBottom: '20px' }}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <button type="submit">Add User</button>
+      </form>
+
+      {/* Users Table */}
+      <table border="1" cellPadding="5" style={{ borderCollapse: "collapse", width: '100%' }}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map(user => (
+            <tr key={user._id}>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>{user.role}</td>
+              <td>
+                <button onClick={() => handleDelete(user._id)}>Delete</button>
+                <button onClick={() => handleUpdate(user)}>Update</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default App;
