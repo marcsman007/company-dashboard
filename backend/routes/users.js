@@ -1,46 +1,49 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const User = require('../models/User'); // Adjust path if necessary
 
-// Get all users
+// GET all users
 router.get('/', async (req, res) => {
-  const users = await User.find();
-  res.json(users);
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
 });
 
-// Add a new user
+// POST new user
 router.post('/', async (req, res) => {
+  const { name, email, role } = req.body;
   try {
-    const existingUser = await User.findOne({ email: req.body.email });
-    if (existingUser) {
-      return res.status(400).json({ error: 'Email already exists' });
-    }
-    const newUser = new User(req.body);
-    const savedUser = await newUser.save();
-    res.json(savedUser);
+    const newUser = new User({ name, email, role });
+    await newUser.save();
+    res.status(201).json(newUser);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to create user' });
   }
 });
 
-
-// Delete user
-router.delete('/:id', async (req, res) => {
-  try {
-    await User.findByIdAndDelete(req.params.id);
-    res.json({ message: 'User deleted' });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-// Update user
+// PUT update user
 router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, email, role } = req.body;
   try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(id, { name, email, role }, { new: true });
     res.json(updatedUser);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to update user' });
+  }
+});
+
+// DELETE user
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await User.findByIdAndDelete(id);
+    res.json({ message: 'User deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete user' });
   }
 });
 

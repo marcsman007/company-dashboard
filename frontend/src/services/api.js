@@ -1,28 +1,56 @@
-import axios from 'axios';
+import axios from "axios";
 
-// Use environment variable for backend URL
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+// Base URL for API
+const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:5000/api";
+
+// Axios instance
+const api = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 // Get all users
 export const getUsers = async () => {
-  const res = await axios.get(`${BASE_URL}/users`);
-  return res.data;
+  try {
+    const res = await api.get("/users");
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    throw err;
+  }
 };
 
-// Create a new user
-export const createUser = async (userData) => {
-  const res = await axios.post(`${BASE_URL}/users`, userData);
-  return res.data;
+// Add a new user
+export const createUser = async (user) => {
+  try {
+    const res = await api.post("/users", user);
+    return res.data;
+  } catch (err) {
+    console.error("Error creating user:", err);
+    throw err;
+  }
 };
 
-// Update user
-export const updateUser = async (id, updatedData) => {
-  const res = await axios.put(`${BASE_URL}/users/${id}`, updatedData);
-  return res.data;
+// Update a user
+export const updateUser = async (id, user) => {
+  try {
+    const res = await api.put(`/users/${id}`, user);
+    return res.data;
+  } catch (err) {
+    console.error("Error updating user:", err);
+    throw err;
+  }
 };
 
-// Delete user
+// Delete a user
 export const deleteUser = async (id) => {
-  const res = await axios.delete(`${BASE_URL}/users/${id}`);
-  return res.data;
+  try {
+    const res = await api.delete(`/users/${id}`);
+    return res.data;
+  } catch (err) {
+    console.error("Error deleting user:", err);
+    throw err;
+  }
 };
