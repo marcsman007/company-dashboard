@@ -1,0 +1,12 @@
+---
+- name: Install MongoDB
+  apt:
+    name: mongodb
+    state: present
+    update_cache: yes
+
+- name: Ensure MongoDB service is running
+  service:
+    name: mongodb
+    state: started
+    enabled: yes

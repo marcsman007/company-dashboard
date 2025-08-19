@@ -1,0 +1,16 @@
+---
+- name: Ensure backend directory exists
+  file:
+    path: /home/ubuntu/backend
+    state: directory
+
+- name: Copy backend code
+  copy:
+    src: ../../backend/
+    dest: /home/ubuntu/backend/
+    mode: 0755
+
+- name: Install Python dependencies
+  pip:
+    requirements: /home/ubuntu/backend/requirements.txt
+    virtualenv: /home/ubuntu/ansible-venv

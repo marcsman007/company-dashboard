@@ -1,0 +1,15 @@
+---
+- name: Setup Webserver
+  hosts: webserver
+  become: yes
+  roles:
+    - common
+    - backend
+    - frontend
+
+- name: Setup MongoDB
+  hosts: mongodb
+  become: yes
+  roles:
+    - common
+    - mongodb
