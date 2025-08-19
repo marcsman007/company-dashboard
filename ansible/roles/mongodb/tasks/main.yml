@@ -1,12 +1,30 @@
 ---
-- name: Install MongoDB
+- name: Ensure Docker is installed
   apt:
-    name: mongodb
+    name: docker.io
     state: present
     update_cache: yes
+  become: yes
 
-- name: Ensure MongoDB service is running
+- name: Ensure Docker service is running
   service:
-    name: mongodb
+    name: docker
     state: started
     enabled: yes
+  become: yes
+- name: Pull MongoDB Docker image
+  community.docker.docker_image:
+    name: mongo
+    tag: "6.0"
+    source: pull
+
+- name: Run MongoDB container
+  community.docker.docker_container:
+    name: mongodb
+    image: mongo:6.0
+    state: started
+    restart_policy: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/mongodb_data:/data/db

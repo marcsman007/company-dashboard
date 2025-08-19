@@ -1,16 +1,21 @@
 ---
 - name: Ensure backend directory exists
   file:
-    path: /home/ubuntu/backend
+    path: ~/company-dashboard/backend
     state: directory
 
 - name: Copy backend code
   copy:
     src: ../../backend/
-    dest: /home/ubuntu/backend/
-    mode: 0755
+    dest: ~/company-dashboard/backend/
+    remote_src: yes
 
 - name: Install Python dependencies
   pip:
-    requirements: /home/ubuntu/backend/requirements.txt
-    virtualenv: /home/ubuntu/ansible-venv
+  #  requirements: /home/ubuntu/backend/requirements.txt
+  #  virtualenv: /home/ubuntu/ansible-venv
+  #  requirements: /home/mjmacaburas/company-dashboard/backend/requirements.txt
+  #  virtualenv: /home/mjmacaburas/company-dashboard/ansible-venv
+    requirements: ~/company-dashboard/backend/requirements.txt
+    virtualenv: ~/company-dashboard/ansible-venv
+

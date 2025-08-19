@@ -11,5 +11,4 @@
   hosts: mongodb
   become: yes
   roles:
-    - common
     - mongodb

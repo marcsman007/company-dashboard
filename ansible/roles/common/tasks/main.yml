@@ -2,7 +2,7 @@
 - name: Update apt cache
   apt:
     update_cache: yes
-    cache_valid_time: 3600
+  become: yes
 
 - name: Install common packages
   apt:
@@ -10,4 +10,7 @@
       - git
       - curl
       - python3-pip
+      - nodejs
+      - npm
     state: present
+  become: yes

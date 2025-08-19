@@ -1,16 +1,16 @@
 ---
 - name: Ensure frontend directory exists
   file:
-    path: /home/ubuntu/frontend
+    path: ~/company-dashboard/frontend
     state: directory
 
 - name: Copy frontend code
   copy:
     src: ../../frontend/
-    dest: /home/ubuntu/frontend/
-    mode: 0755
+    dest: ~/company-dashboard/frontend
+    remote_src: yes
 
 - name: Install npm dependencies
   npm:
-    path: /home/ubuntu/frontend/
+    path: ~/company-dashboard/frontend
     state: present
