@@ -3,34 +3,47 @@ version: "3.9"
 services:
   mongo:
     image: mongo:7
-    container_name: acmecorp-mongo
-    restart: always
+    container_name: acmecorp-mongo-dev
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
-      - mongo-data:/data/db
+      - mongo-data-dev:/data/db
 
   backend:
-    build: ./backend
-    container_name: acmecorp-backend
-    restart: always
-    ports:
-      - "5000:5000"
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: acmecorp-backend-dev
+    restart: unless-stopped
     environment:
       - MONGO_URI=mongodb://mongo:27017/acmecorp
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app        # hot reload for dev
+      - /app/node_modules     # prevent overwriting deps
     depends_on:
       - mongo
 
   frontend:
-    build: ./frontend
-    container_name: acmecorp-frontend
-    restart: always
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: acmecorp-frontend-dev
+    restart: unless-stopped
+    environment:
+      - REACT_APP_BASE_URL=http://acmecorp-backend-dev:5000
+      - HOST=0.0.0.0           # listen on all interfaces
     ports:
       - "3000:80"
-    environment:
-      - REACT_APP_BASE_URL=http://acmecorp-backend:5000
+    volumes:
+      - ./frontend:/app       # hot reload for dev
+      - /app/node_modules
+    stdin_open: true
+    tty: true
     depends_on:
       - backend
 
 volumes:
-  mongo-data:
+  mongo-data-dev:

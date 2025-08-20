@@ -1,0 +1,32 @@
+# Node dependencies (will be installed inside container)
+node_modules
+**/node_modules
+
+# Git files
+.git
+.gitignore
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# Build outputs – rebuilt inside Docker
+/frontend/build
+/backend/build
+/build
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Optional: exclude docker-compose override (not needed for builds)
+docker-compose.override.yml
+
+# Optional: exclude Python virtual env (not needed inside Docker)
+ansible-venv/
