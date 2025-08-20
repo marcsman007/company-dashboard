@@ -2,4 +2,3 @@ mongo_port: 27017
 mongo_db: acmecorp
 mongo_user: acme_user
 mongo_password: secret123
-
