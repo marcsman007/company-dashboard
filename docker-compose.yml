@@ -11,25 +11,27 @@ services:
       - mongo-data-dev:/data/db
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+  #  build:  << for local build
+  #    context: ./backend
+  #    dockerfile: Dockerfile
+    image: mjmacaburas/dashboard-backend:latest
     container_name: acmecorp-backend-dev
     restart: unless-stopped
     environment:
       - MONGO_URI=mongodb://mongo:27017/acmecorp
     ports:
       - "5000:5000"
-    volumes:
-      - ./backend:/app        # hot reload for dev
-      - /app/node_modules     # prevent overwriting deps
+    # volumes: << for local development
+    #  - ./backend:/app        # hot reload for dev
+    #  - /app/node_modules     # prevent overwriting deps
     depends_on:
       - mongo
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    # build:
+    #  context: ./frontend
+    #  dockerfile: Dockerfile
+    image: mjmacaburas/dashboard-frontend:latest
     container_name: acmecorp-frontend-dev
     restart: unless-stopped
     environment:
@@ -37,9 +39,9 @@ services:
       - HOST=0.0.0.0           # listen on all interfaces
     ports:
       - "3000:80"
-    volumes:
-      - ./frontend:/app       # hot reload for dev
-      - /app/node_modules
+    # volumes: << for local development
+    #   - ./frontend:/app       # hot reload for dev
+    #  - /app/node_modules
     stdin_open: true
     tty: true
     depends_on:

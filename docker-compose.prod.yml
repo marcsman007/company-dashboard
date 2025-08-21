@@ -9,9 +9,10 @@ services:
       - mongo-data:/data/db
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    # build:  << for local development
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    image: mjmacaburas/dashboard-backend:latest
     container_name: acmecorp-backend
     restart: unless-stopped
     environment:
@@ -22,9 +23,10 @@ services:
       - mongo
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    # build:  << for local deployment
+    #   context: ./frontend
+    #   dockerfile: Dockerfile
+    image: mjmacaburas/dashboard-frontend:latest
     container_name: acmecorp-frontend
     restart: unless-stopped
     environment:
