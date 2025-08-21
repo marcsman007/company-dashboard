@@ -1,0 +1,16 @@
+---
+- name: Ensure frontend directory exists
+  file:
+    path: ~/company-dashboard/frontend
+    state: directory
+
+- name: Copy frontend code
+  copy:
+    src: ../../frontend/
+    dest: ~/company-dashboard/frontend
+    remote_src: yes
+
+- name: Install npm dependencies
+  npm:
+    path: ~/company-dashboard/frontend
+    state: present
