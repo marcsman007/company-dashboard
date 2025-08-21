@@ -1,0 +1,19 @@
+---
+- name: Deploy local dev containers
+  hosts: local
+  become: yes
+
+  tasks:
+    - name: Pull latest images from Docker Hub
+      # command: docker-compose -f docker-compose.yml pull
+      # args:
+      #   chdir: "{{ playbook_dir }}/.."
+      command: docker-compose -f /home/mjmacaburas/company-dashboard/docker-compose.yml pull
+      become: no
+
+    - name: Start docker-compose services
+      # command: docker-compose -f docker-compose.yml up -d
+      # args:
+      #   chdir: "{{ playbook_dir }}/.."
+      command: docker-compose -f /home/mjmacaburas/company-dashboard/docker-compose.yml up -d
+      become: no

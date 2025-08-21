@@ -1,0 +1,47 @@
+---
+- name: Setup local dev environment
+  hosts: local
+  gather_facts: yes
+
+  tasks:
+    - name: Update apt cache (Debian/Ubuntu)
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+      become: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+      when: ansible_os_family == "Debian"
+      become: yes
+
+    - name: Install Docker (if not installed)
+      apt:
+        name: docker.io
+        state: present
+      when: ansible_os_family == "Debian"
+      become: yes
+
+    - name: Gather system facts for Docker Compose
+      set_fact:
+        compose_os: "{{ ansible_system | lower }}"
+        compose_arch: "{{ 'x86_64' if ansible_architecture == 'x86_64' else 'aarch64' }}"
+
+    - name: Check if Docker Compose exists
+      stat:
+        path: /usr/local/bin/docker-compose
+      register: compose_binary
+
+    - name: Install Docker Compose (if not installed)
+      get_url:
+        url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ compose_os }}-{{ compose_arch }}"
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+      when: not compose_binary.stat.exists
+      become: yes
